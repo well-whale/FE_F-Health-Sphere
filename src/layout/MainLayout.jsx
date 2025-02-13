@@ -18,7 +18,7 @@ const MainLayout = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear authentication token
+    localStorage.removeItem("token");
     message.success("Logged out successfully!");
     navigate("/login");
   };
@@ -31,7 +31,6 @@ const MainLayout = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar */}
       <Sider
         collapsible
         collapsed={collapsed}
@@ -56,7 +55,7 @@ const MainLayout = () => {
           style={{ backgroundColor: "#2c3e50" }}
           onClick={handleMenuClick}
           items={[
-            { key: "dashboard", icon: <DesktopOutlined />, label: "Dashboard" },
+            { key: "/dashboard",icon: <DesktopOutlined />, label: "Dashboard" },
             { key: "patient", icon: <FileOutlined />, label: "Patient" },
             { key: "band", icon: <FileOutlined />, label: "Band" },
           ]}
@@ -64,7 +63,6 @@ const MainLayout = () => {
       </Sider>
 
       <Layout>
-        {/* Header */}
         <Header
           style={{
             backgroundColor: "#fff",
@@ -88,7 +86,6 @@ const MainLayout = () => {
           </Dropdown>
         </Header>
 
-        {/* Dynamic Content */}
         <Content
           style={{
             margin: "20px",
@@ -112,7 +109,6 @@ const MainLayout = () => {
           </div>
         </Content>
 
-        {/* Footer */}
         <Footer
           style={{
             textAlign: "center",

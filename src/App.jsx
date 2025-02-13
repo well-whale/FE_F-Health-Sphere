@@ -9,10 +9,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Route không cần layout (ví dụ: trang đăng nhập) */}
+     
         <Route path="/login" element={<Login />} />
 
-        {/* Route có layout chung */}
+
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/patient" element={<Patient />} />

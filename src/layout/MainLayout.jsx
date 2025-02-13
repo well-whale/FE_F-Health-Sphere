@@ -1,127 +1,69 @@
-import { useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
-import { Layout, Menu, Avatar, Dropdown, Space, message } from "antd";
-import { DesktopOutlined, FileOutlined } from "@ant-design/icons";
+import { useState } from 'react';
+import {
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const MainLayout = () => {
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
+}
+
+const items = [
+  getItem('Option 1', '1', <PieChartOutlined />),
+  getItem('Option 2', '2', <DesktopOutlined />),
+  getItem('User', 'sub1', <UserOutlined />, [
+    getItem('Tom', '3'),
+    getItem('Bill', '4'),
+    getItem('Alex', '5'),
+  ]),
+  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
+  getItem('Files', '9', <FileOutlined />),
+];
+
+const App = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
-
-  const handleMenuClick = ({ key }) => {
-    if (key === "logout") {
-      handleLogout();
-    } else {
-      navigate(`/${key}`);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear authentication token
-    message.success("Logged out successfully!");
-    navigate("/login");
-  };
-
-  const userMenuItems = [
-    { key: "profile", label: "Profile" },
-    { key: "settings", label: "Settings" },
-    { key: "logout", label: "Logout", onClick: handleLogout },
-  ];
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        style={{ backgroundColor: "#34495e", paddingTop: "10px" }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            color: "white",
-            fontSize: collapsed ? "14px" : "20px",
-            fontWeight: "bold",
-            padding: "12px 0",
-          }}
-        >
-          {collapsed ? "Logo" : "My Dashboard"}
-        </div>
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={["dashboard"]}
-          mode="inline"
-          style={{ backgroundColor: "#2c3e50" }}
-          onClick={handleMenuClick}
-          items={[
-            { key: "dashboard", icon: <DesktopOutlined />, label: "Dashboard" },
-            { key: "patient", icon: <FileOutlined />, label: "Patient" },
-            { key: "band", icon: <FileOutlined />, label: "Band" },
-          ]}
-        />
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <div className="demo-logo-vertical" />
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
-
       <Layout>
-        {/* Header */}
-        <Header
-          style={{
-            backgroundColor: "#fff",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "0 20px",
-            borderBottom: "1px solid #eee",
-          }}
-        >
-          <h1 className="m-0 text-4xl">Welcome to Dashboard</h1>
-
-          <Dropdown menu={{ items: userMenuItems }} trigger={["click"]}>
-            <Space>
-              <Avatar
-                src="https://i.pravatar.cc/40"
-                size={40}
-                style={{ cursor: "pointer", backgroundColor: "#3498db" }}
-              />
-            </Space>
-          </Dropdown>
+        <Header style={{ padding: 0, background: colorBgContainer }} >
+            <p className='text-center text-3xl mt-3'>Dashboard</p>
         </Header>
-
-        {/* Dynamic Content */}
-        <Content
-          style={{
-            margin: "20px",
-            background: "#f5f5f5",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>User</Breadcrumb.Item>
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
           <div
             style={{
-              width: "100%",
-              maxWidth: "1500px",
-              backgroundColor: "#fff",
-              padding: "24px",
-              borderRadius: "8px",
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-              color: "#333",
+              padding: 24,
+              minHeight: 360,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet />
+            Bill is a cat.
           </div>
         </Content>
-
-        {/* Footer */}
-        <Footer
-          style={{
-            textAlign: "center",
-            backgroundColor: "#fff",
-            color: "#7f8c8d",
-            padding: "10px",
-            borderTop: "1px solid #eee",
-          }}
-        >
+        <Footer style={{ textAlign: 'center' }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>
       </Layout>
@@ -129,4 +71,4 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+export default App;

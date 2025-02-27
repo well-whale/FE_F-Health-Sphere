@@ -10,20 +10,20 @@ import {
 import { getFirestore } from "firebase/firestore"; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDAb-RLJ3xiHjYf-admj-i5rgOtU7lybzc",
-  authDomain: "fhealth-sphere---login.firebaseapp.com",
-  projectId: "fhealth-sphere---login",
-  storageBucket: "fhealth-sphere---login.appspot.com", // Sửa lại chỗ này
-  messagingSenderId: "44086127203",
-  appId: "1:44086127203:web:444374eafa3a617d8aa656",
-  measurementId: "G-YN8ZXTDCQX",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Khởi tạo Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
-const db = getFirestore(app); // Thêm Firestore
+const db = getFirestore(app);
 
 setPersistence(auth, browserLocalPersistence);
 

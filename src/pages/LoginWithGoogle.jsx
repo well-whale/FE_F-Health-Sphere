@@ -14,10 +14,8 @@ const Login = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
 
-      // 🔹 Lấy ID Token từ Firebase để gửi đến backend
       const idToken = await user.getIdToken();
 
-      // 🔹 Gọi API backend để xác thực và nhận token
       const response = await loginWithGoogle(idToken);
 
       if (!response?.token) {
@@ -25,18 +23,15 @@ const Login = () => {
         return;
       }
 
-      // 🔹 Lưu token vào localStorage
       localStorage.setItem("token", response.token);
 
-      // 🔹 Lấy role từ Firestore
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
-      let role = "user"; // Mặc định là user
+      let role = "user";
       if (userSnap.exists()) {
         role = userSnap.data().role;
       } else {
-        // 🔹 Nếu chưa có trong Firestore, lưu mới
         await setDoc(userRef, { email: user.email, role: "user" });
       }
 
@@ -55,13 +50,11 @@ const Login = () => {
 
   return (
     <div className="relative h-screen">
-      {/* Background Image - full màn hình */}
       <div
         className="absolute inset-0 bg-center bg-contain"
         style={{ backgroundImage: `url(${background})` }}
       ></div>
 
-      {/* Form Login - Chiếm 50% width, nằm trên background */}
       <div className="relative w-1/2 h-screen flex justify-center items-center bg-white bg-opacity-90 p-10 shadow-2xl border border-gray-300 rounded-r-3xl">
         <div className="w-full max-w-sm">
           <h2 className="text-center text-3xl font-bold mb-4 text-gray-800">

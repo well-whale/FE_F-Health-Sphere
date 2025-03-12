@@ -18,9 +18,8 @@ const MainLayout = () => {
   const [userName, setUserName] = useState("User");
   const [userPhoto, setUserPhoto] = useState("");
   const navigate = useNavigate();
-  const location = useLocation(); // Lấy đường dẫn hiện tại của trang
+  const location = useLocation();
 
-  // Xác định menu đang được chọn dựa trên pathname
   const [selectedKey, setSelectedKey] = useState(
     location.pathname.substring(1) || "dashboard"
   );
@@ -29,7 +28,6 @@ const MainLayout = () => {
     setSelectedKey(location.pathname.substring(1) || "dashboard");
   }, [location.pathname]);
 
-  // Lấy tên và ảnh từ Firebase Auth
   useEffect(() => {
     if (auth.currentUser) {
       setUserName(auth.currentUser.displayName || "User");
@@ -94,7 +92,7 @@ const MainLayout = () => {
         </div>
         <Menu
           theme="light"
-          selectedKeys={[selectedKey]} // Đặt selectedKeys theo state
+          selectedKeys={[selectedKey]}
           mode="inline"
           style={{
             borderRight: "none",

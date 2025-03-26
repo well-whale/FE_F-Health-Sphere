@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getBands } from "../api/band";
+import { getBands, getBandBrandById } from "../api/band";
 import { Pagination } from "antd";
 import { FaFilter } from "react-icons/fa";
+
 const Band = () => {
   const [bands, setBands] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,27 @@ const Band = () => {
       try {
         setLoading(true);
         const data = await getBands(currentPage, pageSize);
-        setBands(data.data.items.$values);
+        let bandList = data.data.items.$values;
+
+        const bandWithBrand = await Promise.all(
+          bandList.map(async (band) => {
+            if (band.id) {
+              try {
+                const brandData = await getBandBrandById(band.id);
+                return { ...band, nameBrand: brandData.data.nameBrand };
+              } catch (error) {
+                console.error(
+                  `Error fetching brand for band ${band.id}:`,
+                  error
+                );
+                return { ...band, nameBrand: "Unknown" };
+              }
+            }
+            return { ...band, nameBrand: "Unknown" };
+          })
+        );
+
+        setBands(bandWithBrand);
         setTotalItems(data.data.totalCount);
       } catch (error) {
         console.error("Error fetching bands:", error);
@@ -63,10 +84,9 @@ const Band = () => {
               <thead>
                 <tr className="border-b bg-gray-100">
                   <th className="py-4 px-6">STT</th>
-                  <th className="py-4 px-6">Patient</th>
+                  <th className="py-4 px-6">BandCode</th>
                   <th className="py-4 px-6">BandBrand</th>
                   <th className="py-4 px-6">Created at</th>
-                  {/* <th className="py-4 px-6">Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -75,16 +95,11 @@ const Band = () => {
                     <td className="py-4 px-6">
                       {(currentPage - 1) * pageSize + index + 1}
                     </td>
-                    <td className="py-4 px-6">{band.patient.fullName}</td>
-                    <td className="py-4 px-6">{band.bandBrand.nameBrand}</td>
+                    <td className="py-4 px-6">{band.bandCode || "N/A"}</td>
+                    <td className="py-4 px-6">{band.nameBrand}</td>
                     <td className="py-4 px-6">
                       {new Date(band.createdTime).toLocaleDateString()}
                     </td>
-                    {/* <td className="py-4 px-6">
-                      <button className="p-2 bg-gray-200 rounded-full hover:scale-110 transition">
-                        <BsThreeDots />
-                      </button>
-                    </td> */}
                   </tr>
                 ))}
               </tbody>

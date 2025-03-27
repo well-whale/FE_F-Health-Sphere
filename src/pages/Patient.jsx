@@ -95,11 +95,9 @@ const Patient = () => {
                   </td>
                   <td className="py-4 px-6">
                     {patient.patientInfo?.dateOfBirth
-                      ? new Intl.DateTimeFormat("en-US", {
-                          month: "2-digit",
-                          day: "2-digit",
-                          year: "numeric",
-                        }).format(new Date(patient.patientInfo.dateOfBirth))
+                      ? new Date(patient.patientInfo.dateOfBirth)
+                          .toLocaleDateString("en-GB")
+                          .replace(/\//g, "-")
                       : "N/A"}
                   </td>
                 </tr>
